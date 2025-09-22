@@ -38,7 +38,7 @@ def generate_uuid() -> str:
 def create_access_token(user_data: Dict[str, Any]) -> Dict[str, Any]:
     """创建访问Token"""
     token = generate_token()
-    expire_time = datetime.utcnow() + timedelta(hours=settings.access_token_expire_hours)
+    expire_time = datetime.utcnow() + timedelta(hours=settings.ACCESS_TOKEN_EXPIRE_HOURS)
     
     token_data = {
         "token": token,
@@ -54,7 +54,7 @@ def create_access_token(user_data: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "access_token": token,
         "token_type": "bearer",
-        "expires_in": settings.access_token_expire_hours * 3600,
+        "expires_in": settings.ACCESS_TOKEN_EXPIRE_HOURS * 3600,
         "token_data": token_data
     }
 

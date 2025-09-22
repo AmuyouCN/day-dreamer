@@ -34,8 +34,25 @@ async def lifespan(app: FastAPI):
     # 初始化Redis
     await init_redis()
     
-    logger.info(f"应用启动完成 - {settings.app_name} v{settings.app_version}")
+    logger.info(f"应用启动完成 - {settings.APP_NAME} v{settings.APP_VERSION}")
     
+    # FastAPI应用配置
+    app = FastAPI(
+        title=settings.APP_NAME,
+        description="基于FastAPI的用户权限管理和接口测试平台",
+        version=settings.APP_VERSION,
+        debug=settings.DEBUG,
+        lifespan=lifespan
+    )
+    
+    # 添加CORS中间件
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.ALLOWED_HOSTS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     yield
     
     # 关闭时清理
@@ -45,18 +62,10 @@ async def lifespan(app: FastAPI):
     logger.info("应用已关闭")
 
 
-app = FastAPI(
-    title=settings.app_name,
-    description="基于FastAPI的用户权限管理和接口测试平台",
-    version=settings.app_version,
-    debug=settings.debug,
-    lifespan=lifespan
-)
-
 # 添加CORS中间件
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_hosts,
+    allow_origins=settings.ALLOWED_HOSTS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -83,9 +92,9 @@ app.include_router(reports.router, prefix="/api/v1/reports", tags=["报告管理
 async def root():
     """根路径"""
     return {
-        "message": f"{settings.app_name} API",
-        "version": settings.app_version,
-        "debug": settings.debug
+        "message": f"{settings.APP_NAME} API",
+        "version": settings.APP_VERSION,
+        "debug": settings.DEBUG
     }
 
 
@@ -94,8 +103,8 @@ async def health_check():
     """健康检查"""
     return {
         "status": "healthy",
-        "app_name": settings.app_name,
-        "version": settings.app_version
+        "app_name": settings.APP_NAME,
+        "version": settings.APP_VERSION
     }
 
 
@@ -103,8 +112,8 @@ async def health_check():
 async def app_info():
     """应用信息"""
     return {
-        "app_name": settings.app_name,
-        "version": settings.app_version,
-        "debug": settings.debug,
-        "environment": "development" if settings.debug else "production"
+        "app_name": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "debug": settings.DEBUG,
+        "environment": "development" if settings.DEBUG else "production"
     }

@@ -79,7 +79,7 @@ class AuthService:
                 \"access_token\": access_token,
                 \"refresh_token\": refresh_token,
                 \"token_type\": \"bearer\",
-                \"expires_in\": settings.access_token_expire_hours * 3600,
+                \"expires_in\": settings.ACCESS_TOKEN_EXPIRE_HOURS * 3600,
                 \"user_info\": {
                     \"id\": user.id,
                     \"username\": user.username,
@@ -173,13 +173,13 @@ class AuthService:
             # 延长刷新Token有效期
             await self.redis.expire(
                 refresh_key, 
-                settings.refresh_token_expire_days * 24 * 3600
+                settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
             )
             
             return {
                 \"access_token\": new_access_token,
                 \"token_type\": \"bearer\",
-                \"expires_in\": settings.access_token_expire_hours * 3600
+                \"expires_in\": settings.ACCESS_TOKEN_EXPIRE_HOURS * 3600
             }
             
         except AuthenticationError:
@@ -214,7 +214,7 @@ class AuthService:
     async def _store_access_token(self, token: str, token_data: Dict[str, Any]):
         \"\"\"存储访问Token\"\"\"
         token_key = f\"token:access:{token}\"
-        expire_seconds = settings.access_token_expire_hours * 3600
+        expire_seconds = settings.ACCESS_TOKEN_EXPIRE_HOURS * 3600
         
         await self.redis.setex(
             token_key,
@@ -223,16 +223,16 @@ class AuthService:
         )
     
     async def _store_refresh_token(self, refresh_token: str, user_id: int):
-        \"\"\"存储刷新Token\"\"\"
-        refresh_key = f\"token:refresh:{refresh_token}\"
-        expire_seconds = settings.refresh_token_expire_days * 24 * 3600
+        """存储刷新Token"""
+        refresh_key = f"token:refresh:{refresh_token}"
+        expire_seconds = settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
         
         await self.redis.setex(refresh_key, expire_seconds, str(user_id))
     
     async def _add_user_token(self, user_id: int, token: str):
-        \"\"\"添加用户Token到列表\"\"\"
-        user_tokens_key = f\"user:tokens:{user_id}\"
-        expire_seconds = settings.access_token_expire_hours * 3600
+        """添加用户Token到列表"""
+        user_tokens_key = f"user:tokens:{user_id}"
+        expire_seconds = settings.ACCESS_TOKEN_EXPIRE_HOURS * 3600
         
         await self.redis.sadd(user_tokens_key, token)
         await self.redis.expire(user_tokens_key, expire_seconds)

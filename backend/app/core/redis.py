@@ -20,10 +20,18 @@ class RedisManager:
     async def init_redis(self):
         """初始化Redis连接"""
         try:
-            self._pool = aioredis.ConnectionPool.from_url(
-                settings.redis_url,
-                **settings.redis_config
-            )
+            # 使用新的Redis配置方式
+            redis_config = settings.redis_config
+            connection_kwargs = {
+                "host": redis_config["host"],
+                "port": redis_config["port"],
+                "db": redis_config["db"],
+                "password": redis_config["password"],
+                "max_connections": redis_config["max_connections"],
+                "decode_responses": redis_config["decode_responses"]
+            }
+            
+            self._pool = aioredis.ConnectionPool(**connection_kwargs)
             self._redis = aioredis.Redis(connection_pool=self._pool)
             
             # 测试连接

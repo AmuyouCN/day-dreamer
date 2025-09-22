@@ -14,7 +14,6 @@ RUN pip install uv
 
 # 复制项目配置文件
 COPY pyproject.toml ./
-COPY .uvrc ./
 
 # 创建虚拟环境并安装依赖
 RUN uv venv && \

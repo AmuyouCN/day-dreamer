@@ -26,7 +26,7 @@
 
 ## 🎯 迁移说明
 
-本项目已从 `requirements.txt` 迁移到使用 **UV** 作为现代化的 Python 依赖管理工具，并结合 **pyproject.toml** 进行项目配置。
+本项目已完全移除 `requirements.txt`，现在使用 **UV** 作为现代化的 Python 依赖管理工具，并结合 **pyproject.toml** 进行项目配置。
 
 ## ✨ UV 的优势
 
@@ -50,11 +50,9 @@
 ```
 backend/
 ├── pyproject.toml       # 项目配置和依赖 (新)
-├── .uvrc               # UV 配置文件 (新)
 ├── start_modern.py    # 现代化一键启动脚本 (新)
 ├── .venv/              # 虚拟环境目录 (新)
-├── uv.lock             # 依赖锁定文件 (新，运行后生成)
-└── requirements.txt    # 保留作为兼容性参考
+└── uv.lock             # 依赖锁定文件 (新，运行后生成)
 ```
 
 ## 🚀 快速开始
@@ -164,9 +162,9 @@ python migrate.py
 | 操作 | 传统方式 | UV 方式 |
 |------|----------|---------|
 | 创建虚拟环境 | `python -m venv .venv` | `uv venv` |
-| 安装依赖 | `pip install -r requirements.txt` | `uv pip install -e .` |
-| 安装开发依赖 | `pip install -r requirements-dev.txt` | `uv pip install -e .[dev]` |
-| 更新依赖 | `pip install --upgrade -r requirements.txt` | `uv pip install --upgrade -e .` |
+| 安装依赖 | `pip install` | `uv pip install -e .` |
+| 安装开发依赖 | 手动安装各项工具 | `uv pip install -e .[dev]` |
+| 更新依赖 | `pip install --upgrade` | `uv pip install --upgrade -e .` |
 | 运行脚本 | `python script.py` | `uv run python script.py` |
 | 运行测试 | `pytest` | `uv run pytest` |
 
@@ -178,7 +176,8 @@ python migrate.py
 # 常用依赖管理
 uv pip list                    # 列出已安装的依赖
 uv pip list --outdated         # 显示过期的依赖
-uv pip freeze > requirements-generated.txt  # 生成兼容性 requirements.txt
+# 如果需要生成兼容性 requirements.txt (一般不需要)
+# uv pip freeze > requirements-generated.txt
 
 # 缓存管理
 uv cache clean                 # 清理 UV 缓存
@@ -197,7 +196,7 @@ Dockerfile 已更新使用 UV：
 RUN pip install uv
 
 # 复制项目配置
-COPY pyproject.toml .uvrc ./
+COPY pyproject.toml ./
 
 # 创建虚拟环境并安装依赖
 RUN uv venv && uv pip install -e .
@@ -294,7 +293,7 @@ git add uv.lock
 
 - [UV 官方文档](https://github.com/astral-sh/uv)
 - [pyproject.toml 规范](https://pep518.readthedocs.io/)
-- [Aerich 迁移指南](MIGRATION_GUIDE.md)
+- [Aerich 迁移指南](docs/MIGRATION_GUIDE.md)
 
 ---
 

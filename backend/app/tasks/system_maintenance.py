@@ -327,7 +327,7 @@ async def backup_config_files(backup_dir: str) -> Dict[str, Any]:
         # 备份主要配置文件
         config_files = [
             "app/core/config.py",
-            "requirements.txt",
+            "pyproject.toml",
             "docker-compose.yml"
         ]
         

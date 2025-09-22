@@ -16,7 +16,7 @@ class HttpClient:
     """HTTP客户端类"""
     
     def __init__(self, timeout: int = None):
-        self.timeout = timeout or settings.test_timeout
+        self.timeout = timeout or settings.TEST_TIMEOUT
         self.client = None
     
     async def __aenter__(self):
@@ -185,4 +185,4 @@ class HttpClientPool:
 
 
 # 全局HTTP客户端池
-http_client_pool = HttpClientPool(max_clients=settings.max_concurrent_tests)
+http_client_pool = HttpClientPool(max_clients=settings.MAX_CONCURRENT_TESTS)

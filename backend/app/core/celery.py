@@ -10,13 +10,13 @@ from app.core.config import settings
 # 创建Celery实例
 celery_app = Celery(
     "test_platform",
-    broker=settings.celery_broker_url,
-    backend=settings.celery_result_backend,
+    broker=settings.CELERY_BROKER_URL,
+    backend=settings.CELERY_RESULT_BACKEND,
     include=["app.tasks"]
 )
 
 # 配置Celery
-celery_app.conf.update(settings.celery_config)
+celery_app.conf.update(settings.CELERY_CONFIG)
 
 # 自动发现任务
 celery_app.autodiscover_tasks(["app.tasks"])

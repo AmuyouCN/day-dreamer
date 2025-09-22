@@ -11,8 +11,8 @@ from loguru import logger
 # 创建Celery应用实例
 celery_app = Celery(
     "twodreamer",
-    broker=settings.celery_broker_url,
-    backend=settings.celery_result_backend,
+    broker=settings.CELERY_BROKER_URL,
+    backend=settings.CELERY_RESULT_BACKEND,
     include=[
         "app.tasks.test_execution",
         "app.tasks.report_generation",
