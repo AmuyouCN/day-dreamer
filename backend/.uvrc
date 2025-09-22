@@ -1,0 +1,14 @@
+# uv 环境变量配置文件
+# UV_PYTHON=python3.11
+# UV_INDEX_URL=https://pypi.org/simple
+# UV_EXTRA_INDEX_URL=https://pypi.doubanio.com/simple/
+
+# 缓存配置
+UV_CACHE_DIR=.uv-cache
+
+# 并发配置
+UV_CONCURRENT_DOWNLOADS=10
+UV_CONCURRENT_BUILDS=4
+
+# 开发模式
+UV_DEVELOPMENT=true

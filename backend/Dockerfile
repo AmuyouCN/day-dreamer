@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -9,9 +9,16 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装Python依赖
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 安装 uv
+RUN pip install uv
+
+# 复制项目配置文件
+COPY pyproject.toml ./
+COPY .uvrc ./
+
+# 创建虚拟环境并安装依赖
+RUN uv venv && \
+    uv pip install -e .
 
 # 复制代码
 COPY . .
@@ -21,4 +28,4 @@ RUN mkdir -p logs
 
 EXPOSE 8000
 
-CMD ["python", "start.py"]
+CMD ["uv", "run", "python", "start.py"]

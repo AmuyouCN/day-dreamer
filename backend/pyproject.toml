@@ -1,0 +1,114 @@
+[project]
+name = "test-platform-backend"
+version = "1.0.0"
+description = "接口自动化测试平台后端"
+authors = [
+    { name = "Team", email = "team@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Framework :: FastAPI",
+]
+
+# 生产依赖
+dependencies = [
+    # Web框架
+    "fastapi==0.104.1",
+    "uvicorn[standard]==0.24.0",
+    
+    # 数据库相关
+    "tortoise-orm[asyncmy]==0.20.0",
+    "aiomysql==0.2.0",
+    "aerich==0.7.2",
+    
+    # 认证和安全
+    "passlib[bcrypt]==1.7.4",
+    "python-jose[cryptography]==3.3.0",
+    
+    # Redis和缓存
+    "aioredis==2.0.1",
+    
+    # 异步任务
+    "celery==5.3.4",
+    
+    # HTTP客户端
+    "httpx==0.25.2",
+    
+    # 日志
+    "loguru==0.7.2",
+    
+    # 数据验证
+    "pydantic==2.5.0",
+    
+    # 配置管理
+    "pydantic-settings==2.1.0",
+    
+    # 开发工具
+    "python-multipart==0.0.6",
+]
+
+# 开发依赖
+[project.optional-dependencies]
+dev = [
+    "pytest==7.4.3",
+    "pytest-asyncio==0.21.1",
+    "pytest-cov",
+    "black",
+    "isort",
+    "flake8",
+    "mypy",
+]
+
+test = [
+    "pytest==7.4.3",
+    "pytest-asyncio==0.21.1",
+    "pytest-cov",
+]
+
+lint = [
+    "black",
+    "isort",
+    "flake8",
+    "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/example/test-platform"
+Repository = "https://github.com/example/test-platform.git"
+Issues = "https://github.com/example/test-platform/issues"
+
+# 构建系统配置
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# uv 配置
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.21.1",
+    "pytest-cov",
+    "black",
+    "isort",
+    "flake8",
+    "mypy",
+]
+
+[tool.poetry]
+name = "test-platform-backend"
+version = "1.0.0"
+description = "接口自动化测试平台后端"
+
+[tool.aerich]
+tortoise_orm = "app.core.database_config.TORTOISE_CONFIG"
+location = "./migrations"
+src_folder = "./."

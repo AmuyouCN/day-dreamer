@@ -35,6 +35,6 @@ def setup_database(app: FastAPI):
     register_tortoise(
         app,
         config=settings.database_config,
-        generate_schemas=settings.debug,  # 仅在开发环境自动生成表
+        generate_schemas=False,  # 使用 aerich 管理数据库结构，不自动生成
         add_exception_handlers=True,
     )

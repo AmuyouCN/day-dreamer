@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  # 数据库迁移初始化容器
+  db-migrate:
+    build: .
+    command: >
+      sh -c "echo 'Waiting for MySQL...' &&
+             sleep 30 &&
+             echo 'Initializing database migrations...' &&
+             uv run aerich init -t app.core.database_config.TORTOISE_CONFIG &&
+             uv run aerich init-db &&
+             echo 'Inserting initial data...' &&
+             uv run python init_data.py &&
+             echo 'Database initialization completed!'"
+    environment:
+      - DATABASE_URL=mysql://root:password@mysql:3306/test_platform_dev
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./migrations:/app/migrations
+
   app:
     build: .
     ports:
@@ -16,6 +37,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - db-migrate
     volumes:
       - ./logs:/app/logs
 
@@ -41,7 +63,10 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   redis:
     image: redis:alpine
