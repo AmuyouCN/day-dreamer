@@ -57,6 +57,25 @@ backend/
 
 ## 🚀 快速开始
 
+### 🇨🇳 国内镜像加速
+
+项目已配置国内镜像源以显著提升依赖安装速度：
+
+**主要镜像源**：
+- 🎓 清华大学: https://pypi.tuna.tsinghua.edu.cn/simple
+- ☁️ 阿里云: https://mirrors.aliyun.com/pypi/simple/
+- 📚 豆瓣: https://pypi.douban.com/simple/
+- 🏫 中科大: https://pypi.mirrors.ustc.edu.cn/simple/
+
+**配置文件**：
+- `pyproject.toml` - 统一配置文件（UV + 项目配置）
+
+**测试镜像效果**：
+```bash
+# 测试下载速度
+uv pip install --dry-run --verbose requests
+```
+
 ### 1. 安装 UV
 ```bash
 # 方式1: 使用 pip

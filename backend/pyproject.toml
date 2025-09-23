@@ -26,7 +26,7 @@ dependencies = [
     "uvicorn[standard]==0.24.0",
     
     # 数据库相关
-    "tortoise-orm[asyncmy]==0.20.0",
+    "tortoise-orm==0.20.0",
     "aiomysql==0.2.0",
     "aerich==0.7.2",
     
@@ -56,7 +56,7 @@ dependencies = [
     "python-multipart==0.0.6",
     
     # 高性能事件循环
-    "uvloop==0.19.0",
+    "uvloop==0.19.0; sys_platform != 'win32'",
 ]
 
 # 开发依赖
@@ -94,8 +94,30 @@ Issues = "https://github.com/example/test-platform/issues"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# Hatch 构建配置
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+# Hatch 版本配置
+[tool.hatch.version]
+path = "app/__init__.py"
+
 # uv 配置
 [tool.uv]
+# 镜像源配置（提升国内下载速度）
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+extra-index-url = [
+    "https://mirrors.aliyun.com/pypi/simple/",
+    "https://pypi.douban.com/simple/",
+    "https://pypi.mirrors.ustc.edu.cn/simple/",
+]
+
+# 优先使用预编译包，避免编译问题
+no-build = true
+
+# 注意：UV 不支持 trusted-host 配置，使用 HTTPS 镜像源已足够安全
+
+# 开发依赖
 dev-dependencies = [
     "pytest>=7.4.3",
     "pytest-asyncio>=0.21.1",
@@ -105,11 +127,6 @@ dev-dependencies = [
     "flake8",
     "mypy",
 ]
-
-[tool.poetry]
-name = "test-platform-backend"
-version = "1.0.0"
-description = "接口自动化测试平台后端"
 
 [tool.aerich]
 tortoise_orm = "app.core.database_config.TORTOISE_CONFIG"
